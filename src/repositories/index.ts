@@ -1,0 +1,1 @@
+export { AppointmentsRepository } from './AppointmentsRepository'
