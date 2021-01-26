@@ -1,11 +1,10 @@
-import { getRepository } from 'typeorm'
 import { hash } from 'bcryptjs'
+import { getRepository } from 'typeorm'
 
 import { AppError } from '../errors'
-
 import { User } from '../models'
 
-interface Request {
+type Request = {
   name: string
   email: string
   password: string

@@ -2,11 +2,10 @@ import { startOfHour } from 'date-fns'
 import { getCustomRepository } from 'typeorm'
 
 import { AppError } from '../errors'
-
 import { Appointment } from '../models'
 import { AppointmentsRepository } from '../repositories'
 
-interface Request {
+type Request = {
   provider_id: string
   date: Date
 }

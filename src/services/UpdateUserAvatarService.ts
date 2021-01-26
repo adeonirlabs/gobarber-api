@@ -1,20 +1,18 @@
-import { join } from 'path'
 import fs from 'fs'
+import { join } from 'path'
 import { getRepository } from 'typeorm'
 
+import uploadConfig from '../config/upload'
 import { AppError } from '../errors'
-
 import { User } from '../models'
 
-import uploadConfig from '../config/upload'
-
-interface Request {
+type Request = {
   user_id: string
-  filename: string
+  avatar_filename: string
 }
 
 export class UpdateUserAvatarService {
-  public async execute({ user_id, filename }: Request): Promise<User> {
+  public async execute({ user_id, avatar_filename }: Request): Promise<User> {
     const usersRepository = getRepository(User)
 
     const user = await usersRepository.findOne(user_id)
@@ -24,7 +22,7 @@ export class UpdateUserAvatarService {
     }
 
     if (user.avatar) {
-      const avatarPath = join(uploadConfig.dir, user.avatar)
+      const avatarPath = join(uploadConfig.directory, user.avatar)
       const avatarExists = await fs.promises.stat(avatarPath)
 
       if (avatarExists) {
@@ -32,7 +30,7 @@ export class UpdateUserAvatarService {
       }
     }
 
-    user.avatar = filename
+    user.avatar = avatar_filename
 
     await usersRepository.save(user)
 

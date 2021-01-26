@@ -1,8 +1,8 @@
 import { Router } from 'express'
 
 import { appointmentsRouter } from './appointments'
-import { usersRouter } from './users'
 import { sessionsRouter } from './sessions'
+import { usersRouter } from './users'
 
 export const Routes = Router()
 

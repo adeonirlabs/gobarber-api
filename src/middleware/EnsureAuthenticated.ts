@@ -1,11 +1,10 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { verify } from 'jsonwebtoken'
 
+import authConfig from '../config/auth'
 import { AppError } from '../errors'
 
-import authConfig from '../config/auth'
-
-interface TokenPayload {
+type TokenPayload = {
   iat: number
   exp: number
   sub: string
