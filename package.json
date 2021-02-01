@@ -4,10 +4,10 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/server.ts",
-    "server": "ts-node-dev --transpile-only --pretty --project tsconfig.json --inspect --ignore-watch node_modules src/server.ts",
+    "start": "ts-node src/shared/infra/http/server.ts",
+    "server": "ts-node-dev -r tsconfig-paths/register --transpile-only --pretty --project tsconfig.json --inspect --ignore-watch node_modules src/shared/infra/http/server.ts",
     "build": "tsc",
-    "typeorm": "ts-node-dev node_modules/typeorm/cli.js",
+    "typeorm": "ts-node-dev -r tsconfig-paths/register node_modules/typeorm/cli.js",
     "eslint": "eslint --fix --ext .ts,.tsx  src"
   },
   "dependencies": {
@@ -42,6 +42,7 @@
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.1",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.1.3"
   }
 }

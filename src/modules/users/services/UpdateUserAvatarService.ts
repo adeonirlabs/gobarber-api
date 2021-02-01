@@ -1,10 +1,10 @@
+import uploadConfig from 'config/upload'
 import fs from 'fs'
 import { join } from 'path'
+import { AppError } from 'shared/errors/AppError'
 import { getRepository } from 'typeorm'
 
-import uploadConfig from '../config/upload'
-import { AppError } from '../errors/AppError'
-import { User } from '../models/User'
+import { User } from '../infra/typeorm/entities/User'
 
 type Request = {
   user_id: string
