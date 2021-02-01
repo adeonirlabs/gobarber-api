@@ -6,7 +6,7 @@ import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
 
 import uploadConfig from './config/upload'
-import { AppError } from './errors'
+import { AppError } from './errors/AppError'
 import { Routes } from './routes'
 
 const app = express()

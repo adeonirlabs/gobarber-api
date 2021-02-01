@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { verify } from 'jsonwebtoken'
 
 import authConfig from '../config/auth'
-import { AppError } from '../errors'
+import { AppError } from '../errors/AppError'
 
 type TokenPayload = {
   iat: number

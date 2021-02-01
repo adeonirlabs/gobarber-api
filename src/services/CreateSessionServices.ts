@@ -3,8 +3,8 @@ import { sign } from 'jsonwebtoken'
 import { getRepository } from 'typeorm'
 
 import authConfig from '../config/auth'
-import { AppError } from '../errors'
-import { User } from '../models'
+import { AppError } from '../errors/AppError'
+import { User } from '../models/User'
 
 type Request = {
   email: string

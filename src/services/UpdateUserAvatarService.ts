@@ -3,8 +3,8 @@ import { join } from 'path'
 import { getRepository } from 'typeorm'
 
 import uploadConfig from '../config/upload'
-import { AppError } from '../errors'
-import { User } from '../models'
+import { AppError } from '../errors/AppError'
+import { User } from '../models/User'
 
 type Request = {
   user_id: string

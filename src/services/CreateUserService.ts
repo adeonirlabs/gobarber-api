@@ -1,8 +1,8 @@
 import { hash } from 'bcryptjs'
 import { getRepository } from 'typeorm'
 
-import { AppError } from '../errors'
-import { User } from '../models'
+import { AppError } from '../errors/AppError'
+import { User } from '../models/User'
 
 type Request = {
   name: string
