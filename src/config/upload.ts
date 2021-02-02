@@ -1,18 +1,20 @@
 import crypto from 'crypto'
 import multer from 'multer'
-import { resolve } from 'path'
+import path from 'path'
 
-const tmp = resolve(__dirname, '..', '..', 'tmp')
+const tpmFolder = path.resolve(__dirname, '..', '..', 'tmp')
 
 export default {
-  directory: tmp,
-  storage: multer.diskStorage({
-    destination: tmp,
-    filename(request, file, callback) {
-      const hash = crypto.randomBytes(10).toString('hex')
-      const name = `${hash}-${file.originalname}`
+  tpmFolder,
+  uploadsFolder: path.resolve(tpmFolder, 'uploads'),
 
-      return callback(null, name)
+  storage: multer.diskStorage({
+    destination: tpmFolder,
+    filename(request, file, callback) {
+      const fileHash = crypto.randomBytes(10).toString('hex')
+      const fileName = `${fileHash}-${file.originalname}`
+
+      return callback(null, fileName)
     },
   }),
 }

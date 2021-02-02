@@ -1,39 +1,44 @@
-import uploadConfig from 'config/upload'
-import fs from 'fs'
-import { join } from 'path'
-import { AppError } from 'shared/errors/AppError'
-import { getRepository } from 'typeorm'
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider'
+import AppError from '@shared/errors/AppError'
+import { inject, injectable } from 'tsyringe'
 
-import { User } from '../infra/typeorm/entities/User'
+import User from '../infra/typeorm/entities/User'
+import IUsersRepository from '../repositories/IUsersRepository'
 
-type Request = {
+interface IRequest {
   user_id: string
-  avatar_filename: string
+  avatarFilename: string
 }
 
-export class UpdateUserAvatarService {
-  public async execute({ user_id, avatar_filename }: Request): Promise<User> {
-    const usersRepository = getRepository(User)
+@injectable()
+class UpdateUserAvatarService {
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
 
-    const user = await usersRepository.findOne(user_id)
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider,
+  ) {}
+
+  public async execute({ user_id, avatarFilename }: IRequest): Promise<User> {
+    const user = await this.usersRepository.findById(user_id)
 
     if (!user) {
-      throw new AppError('Only authenticated users can update avatar!', 401)
+      throw new AppError('Only authenticated users can change avatar.', 401)
     }
 
     if (user.avatar) {
-      const avatarPath = join(uploadConfig.directory, user.avatar)
-      const avatarExists = await fs.promises.stat(avatarPath)
-
-      if (avatarExists) {
-        await fs.promises.unlink(avatarPath)
-      }
+      await this.storageProvider.deleteFile(user.avatar)
     }
 
-    user.avatar = avatar_filename
+    const filename = await this.storageProvider.saveFile(avatarFilename)
 
-    await usersRepository.save(user)
+    user.avatar = filename
+
+    await this.usersRepository.save(user)
 
     return user
   }
 }
+
+export default UpdateUserAvatarService

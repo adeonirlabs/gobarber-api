@@ -1,4 +1,4 @@
-import { User } from 'modules/users/infra/typeorm/entities/User'
+import User from '@modules/users/infra/typeorm/entities/User'
 import {
   Column,
   CreateDateColumn,
@@ -10,18 +10,25 @@ import {
 } from 'typeorm'
 
 @Entity('appointments')
-export class Appointment {
+class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column()
+  @Column('varchar')
   provider_id: string
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'provider_id' })
   provider: User
 
-  @Column('time with time zone')
+  @Column('varchar')
+  user_id: string
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User
+
+  @Column('timestamp without time zone')
   date: Date
 
   @CreateDateColumn()
@@ -30,3 +37,5 @@ export class Appointment {
   @UpdateDateColumn()
   updated_at: Date
 }
+
+export default Appointment
