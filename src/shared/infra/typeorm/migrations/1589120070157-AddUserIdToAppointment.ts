@@ -5,7 +5,7 @@ import {
   TableForeignKey,
 } from 'typeorm'
 
-export default class AddUserIdToAppointments1609859310376
+export default class AddUserIdToAppointment1589120070157
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(

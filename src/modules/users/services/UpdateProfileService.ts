@@ -1,8 +1,8 @@
+import User from '@modules/users/infra/typeorm/entities/User'
+import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider'
 import AppError from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
 
-import User from '../infra/typeorm/entities/User'
-import IHashProvider from '../providers/HashProvider/models/IHashProvider'
 import IUsersRepository from '../repositories/IUsersRepository'
 
 interface IRequest {
@@ -27,19 +27,18 @@ class UpdateProfileService {
     user_id,
     name,
     email,
-    password,
     old_password,
+    password,
   }: IRequest): Promise<User> {
     const user = await this.usersRepository.findById(user_id)
-
     if (!user) {
       throw new AppError('User not found')
     }
 
-    const userWithUpdateEmail = await this.usersRepository.findByEmail(email)
+    const userWithUpdatedEmail = await this.usersRepository.findByEmail(email)
 
-    if (userWithUpdateEmail && userWithUpdateEmail.id !== user_id) {
-      throw new AppError('E-mail already in use')
+    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user_id) {
+      throw new AppError('Already have a user with this email')
     }
 
     user.name = name
@@ -58,13 +57,15 @@ class UpdateProfileService {
       )
 
       if (!checkOldPassword) {
-        throw new AppError('Old password does not match.')
+        throw new AppError('Old password does not macth')
       }
 
       user.password = await this.hashProvider.generateHash(password)
     }
 
-    return this.usersRepository.save(user)
+    await this.usersRepository.save(user)
+
+    return user
   }
 }
 

@@ -1,16 +1,17 @@
 import uploadConfig from '@config/upload'
+import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated'
 import { celebrate, Joi, Segments } from 'celebrate'
 import { Router } from 'express'
 import multer from 'multer'
 
 import UserAvatarController from '../controllers/UserAvatarController'
 import UsersController from '../controllers/UsersController'
-import ensureAuthenticated from '../middlewares/ensureAuthenticated'
 
 const usersRouter = Router()
+const upload = multer(uploadConfig.multer)
+
 const usersController = new UsersController()
 const userAvatarController = new UserAvatarController()
-const upload = multer(uploadConfig)
 
 usersRouter.post(
   '/',
@@ -24,7 +25,6 @@ usersRouter.post(
   usersController.create,
 )
 
-// utiliza .patch quando quando quero alterar apenas 1 informação
 usersRouter.patch(
   '/avatar',
   ensureAuthenticated,

@@ -2,7 +2,7 @@ import CreateAppointmentService from '@modules/appointments/services/CreateAppoi
 import { Request, Response } from 'express'
 import { container } from 'tsyringe'
 
-class AppointmentsController {
+export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id
     const { provider_id, date } = request.body
@@ -18,5 +18,3 @@ class AppointmentsController {
     return response.json(appointment)
   }
 }
-
-export default AppointmentsController

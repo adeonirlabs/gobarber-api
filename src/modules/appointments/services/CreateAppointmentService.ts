@@ -27,27 +27,29 @@ class CreateAppointmentService {
   ) {}
 
   public async execute({
-    date,
     provider_id,
     user_id,
+    date,
   }: IRequest): Promise<Appointment> {
     const appointmentDate = startOfHour(date)
 
-    if (isBefore(appointmentDate, Date.now())) {
-      throw new AppError("You can't create an appointemnt on a past date.")
-    }
-
     if (user_id === provider_id) {
-      throw new AppError("You can't create an appointment with yourself.")
+      throw new AppError('You cannot create  an appointment with yourself')
     }
 
-    if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 17) {
-      throw new AppError('You can only create appointments between 8am and 5pm')
+    const hour = getHours(appointmentDate)
+    if (hour < 8 || hour > 17) {
+      throw new AppError(
+        'You can only create appointments between 8am and 5pm.',
+      )
+    }
+
+    if (isBefore(appointmentDate, Date.now())) {
+      throw new AppError('you cannot create an appointment in the past date')
     }
 
     const findAppointmentInSameDate = await this.appointmentsRepository.findByDate(
       appointmentDate,
-      provider_id,
     )
 
     if (findAppointmentInSameDate) {
@@ -60,11 +62,11 @@ class CreateAppointmentService {
       date: appointmentDate,
     })
 
-    const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm'h'")
+    const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm")
 
     await this.notificationsRepository.create({
       recipient_id: provider_id,
-      content: `Novo agendamento para dia ${dateFormatted}`,
+      content: `Novo agendamento para ${dateFormatted}`,
     })
 
     await this.cacheProvider.invalidate(

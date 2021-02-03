@@ -1,3 +1,4 @@
+// import User from '@modules/users/infra/typeorm/entities/User';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider'
 import AppError from '@shared/errors/AppError'
 import path from 'path'
@@ -27,7 +28,7 @@ class SendForgotPasswordEmailService {
     const user = await this.usersRepository.findByEmail(email)
 
     if (!user) {
-      throw new AppError('User does not exists')
+      throw new AppError('User does not exists.')
     }
 
     const { token } = await this.userTokensRepository.generate(user.id)
@@ -40,10 +41,7 @@ class SendForgotPasswordEmailService {
     )
 
     await this.mailProvider.sendMail({
-      to: {
-        name: user.name,
-        email: user.email,
-      },
+      to: { name: user.name, email: user.email },
       subject: '[GoBarber] Recuperação de senha',
       templateData: {
         file: forgotPasswordTemplate,

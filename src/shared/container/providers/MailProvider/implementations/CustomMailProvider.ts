@@ -7,16 +7,17 @@ import ISendMailDTO from '../dtos/ISendMailDTO'
 import IMailProvider from '../models/IMailProvider'
 
 @injectable()
-export default class EtherealMailProvider implements IMailProvider {
+export default class CustomMailProvider implements IMailProvider {
   private client: Transporter
 
+  // should setting email from gmail for sample via smtp
   constructor(
     @inject('MailTemplateProvider')
     private mailTemplateProvider: IMailTemplateProvider,
   ) {
     nodemailer.createTestAccount().then(account => {
       const transporter = nodemailer.createTransport({
-        host: account.smtp.host,
+        host: 'account.smtp.host',
         port: account.smtp.port,
         secure: account.smtp.secure,
         auth: {
@@ -35,6 +36,7 @@ export default class EtherealMailProvider implements IMailProvider {
     from,
     templateData,
   }: ISendMailDTO): Promise<void> {
+    console.log(' custom working')
     const message = await this.client.sendMail({
       from: {
         name: from?.name || 'Equipe Gobarber',

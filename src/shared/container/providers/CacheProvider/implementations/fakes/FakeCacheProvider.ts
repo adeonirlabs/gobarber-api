@@ -1,10 +1,10 @@
-import ICacheProvider from '../models/ICacheProvider'
+import ICacheProvider from '../../models/ICacheProvider'
 
 interface ICacheData {
   [key: string]: string
 }
 
-class FakeCacheProvider implements ICacheProvider {
+export default class FakeCachePRovider implements ICacheProvider {
   private cache: ICacheData = {}
 
   public async save(key: string, value: unknown): Promise<void> {
@@ -13,13 +13,10 @@ class FakeCacheProvider implements ICacheProvider {
 
   public async recover<T>(key: string): Promise<T | null> {
     const data = this.cache[key]
-
     if (!data) {
       return null
     }
-
     const parsedData = JSON.parse(data) as T
-
     return parsedData
   }
 
@@ -37,5 +34,3 @@ class FakeCacheProvider implements ICacheProvider {
     })
   }
 }
-
-export default FakeCacheProvider

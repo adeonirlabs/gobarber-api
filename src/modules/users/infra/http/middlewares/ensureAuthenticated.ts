@@ -14,18 +14,13 @@ export default function ensureAuthenticated(
   response: Response,
   next: NextFunction,
 ): void {
-  // Validação do token JWT
-
   const authHeader = request.headers.authorization
 
   if (!authHeader) {
-    throw new AppError('JWT token is missing', 401)
+    throw new AppError('JTW token is missing', 401)
   }
 
-  // Bearer
-
   const [, token] = authHeader.split(' ')
-
   try {
     const decoded = verify(token, authConfig.jwt.secret)
 
@@ -37,6 +32,6 @@ export default function ensureAuthenticated(
 
     return next()
   } catch {
-    throw new AppError('Invalid JWT token', 401)
+    throw new AppError('Invalid JTW token', 401)
   }
 }

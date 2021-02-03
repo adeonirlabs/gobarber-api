@@ -10,11 +10,11 @@ let fakeMailProvider: FakeMailProvider
 let fakeUserTokensRepository: FakeUserTokensRepository
 let sendForgotPasswordEmail: SendForgotPasswordEmailService
 
-describe('SendForgotPasswordEmail', () => {
+describe('SendForgotPassowordService', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository()
-    fakeMailProvider = new FakeMailProvider()
     fakeUserTokensRepository = new FakeUserTokensRepository()
+    fakeMailProvider = new FakeMailProvider()
 
     sendForgotPasswordEmail = new SendForgotPasswordEmailService(
       fakeUsersRepository,
@@ -25,14 +25,15 @@ describe('SendForgotPasswordEmail', () => {
 
   it('should be able to recover the password using the email', async () => {
     const sendMail = jest.spyOn(fakeMailProvider, 'sendMail')
+
     await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
+      name: 'Thiago Marinho',
+      email: 'tgmarinho@gmail.com',
       password: '123456',
     })
 
     await sendForgotPasswordEmail.execute({
-      email: 'johndoe@example.com',
+      email: 'tgmarinho@gmail.com',
     })
 
     expect(sendMail).toHaveBeenCalled()
@@ -41,7 +42,7 @@ describe('SendForgotPasswordEmail', () => {
   it('should not be able to recover a non-existing user password', async () => {
     await expect(
       sendForgotPasswordEmail.execute({
-        email: 'johndoe@example.com',
+        email: 'tgmarinho@gmail.com',
       }),
     ).rejects.toBeInstanceOf(AppError)
   })
@@ -50,13 +51,13 @@ describe('SendForgotPasswordEmail', () => {
     const generateToken = jest.spyOn(fakeUserTokensRepository, 'generate')
 
     const user = await fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
+      name: 'Thiago Marinho',
+      email: 'tgmarinho@gmail.com',
       password: '123456',
     })
 
     await sendForgotPasswordEmail.execute({
-      email: 'johndoe@example.com',
+      email: user.email,
     })
 
     expect(generateToken).toHaveBeenCalledWith(user.id)

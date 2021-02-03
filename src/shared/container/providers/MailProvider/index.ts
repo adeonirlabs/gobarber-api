@@ -1,13 +1,13 @@
 import mailConfig from '@config/mail'
 import { container } from 'tsyringe'
 
+import CustomMailProvider from './implementations/CustomMailProvider'
 import EtherealMailProvider from './implementations/EtherealMailProvider'
-import SESMailProvider from './implementations/SESMailProvider'
 import IMailProvider from './models/IMailProvider'
 
 const providers = {
   ethereal: container.resolve(EtherealMailProvider),
-  ses: container.resolve(SESMailProvider),
+  custom: container.resolve(CustomMailProvider),
 }
 
 container.registerInstance<IMailProvider>(

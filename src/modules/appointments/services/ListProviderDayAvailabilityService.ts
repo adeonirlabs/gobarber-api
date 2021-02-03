@@ -5,9 +5,9 @@ import IAppointmentsRepository from '../repositories/IAppointmentsRepository'
 
 interface IRequest {
   provider_id: string
-  day: number
   month: number
   year: number
+  day: number
 }
 
 type IResponse = Array<{
@@ -37,11 +37,11 @@ class ListProviderDayAvailabilityService {
       },
     )
 
-    const hourStart = 8
+    const hourStar = 8
 
     const eachHourArray = Array.from(
       { length: 10 },
-      (_, index) => index + hourStart,
+      (_, index) => index + hourStar,
     )
 
     const currentDate = new Date(Date.now())

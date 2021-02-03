@@ -14,21 +14,21 @@ class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column('varchar')
+  @Column()
   provider_id: string
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'provider_id' })
   provider: User
 
-  @Column('varchar')
+  @Column()
   user_id: string
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User
 
-  @Column('timestamp without time zone')
+  @Column('timestamp with time zone')
   date: Date
 
   @CreateDateColumn()

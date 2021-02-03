@@ -1,47 +1,61 @@
-import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository'
-import ListProviderMonthAvailabilityService from '@modules/appointments/services/ListProviderMonthAvailabilityService'
+import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository'
+import ListProviderMonthAvailabilityService from './ListProviderMonthAvailabilityService'
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository
-let listProviderMonthAvailability: ListProviderMonthAvailabilityService
+let listProviderMonthAvailabity: ListProviderMonthAvailabilityService
 
-describe('ListProviderMonthAvailability', () => {
+describe('ListProviderMonthAvailabilityService', () => {
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository()
-
-    listProviderMonthAvailability = new ListProviderMonthAvailabilityService(
+    listProviderMonthAvailabity = new ListProviderMonthAvailabilityService(
       fakeAppointmentsRepository,
     )
   })
 
-  it('should be able to list the month availability from provider', async () => {
-    await Promise.all(
-      Array.from({ length: 10 }, (_, index) =>
-        fakeAppointmentsRepository.create({
-          date: new Date(2020, 4, 20, index + 8),
-          user_id: 'user',
+  it('should be able to list providers availables in the month', async () => {
+    const promissesCreateAppointmentInBusinessHours = Array.from(
+      { length: 10 },
+      (_, index) => {
+        return fakeAppointmentsRepository.create({
           provider_id: 'provider',
-        }),
-      ),
+          user_id: 'loogedUser',
+          date: new Date(2020, 3, 20, index + 8, 0, 0),
+        })
+      },
     )
 
+    await Promise.all(promissesCreateAppointmentInBusinessHours)
+
     await fakeAppointmentsRepository.create({
-      date: new Date(2020, 4, 21, 11),
-      user_id: 'user',
       provider_id: 'provider',
+      user_id: 'loogedUser',
+      date: new Date(2020, 3, 21, 8, 0, 0),
     })
 
-    const availability = await listProviderMonthAvailability.execute({
-      month: 5,
+    const availability = await listProviderMonthAvailabity.execute({
+      provider_id: 'provider',
       year: 2020,
-      provider_id: 'provider',
+      month: 4,
     })
 
-    expect(availability).toEqual(
+    await expect(availability).toEqual(
       expect.arrayContaining([
-        { day: 19, available: true },
-        { day: 20, available: false },
-        { day: 21, available: true },
-        { day: 22, available: true },
+        {
+          day: 19,
+          available: true,
+        },
+        {
+          day: 20,
+          available: false,
+        },
+        {
+          day: 21,
+          available: true,
+        },
+        {
+          day: 22,
+          available: true,
+        },
       ]),
     )
   })
