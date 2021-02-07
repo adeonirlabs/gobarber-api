@@ -28,9 +28,9 @@ class FakeAppointmentRepository implements IAppointmentsRepository {
 
   public async findAllInDayFromProvider({
     provider_id,
+    day,
     month,
     year,
-    day,
   }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
     const appointments = this.appointments.filter(appointment => {
       return (
@@ -44,9 +44,14 @@ class FakeAppointmentRepository implements IAppointmentsRepository {
     return appointments
   }
 
-  public async findByDate(date: Date): Promise<Appointment | undefined> {
-    const findAppointment = this.appointments.find(appointment =>
-      isEqual(appointment.date, date),
+  public async findByDate(
+    date: Date,
+    provider_id: string,
+  ): Promise<Appointment | undefined> {
+    const findAppointment = this.appointments.find(
+      appointment =>
+        isEqual(appointment.date, date) &&
+        appointment.provider_id === provider_id,
     )
 
     return findAppointment
@@ -58,9 +63,6 @@ class FakeAppointmentRepository implements IAppointmentsRepository {
     date,
   }: ICreateAppointmentDTO): Promise<Appointment> {
     const appointment = new Appointment()
-    // appointment.id = uuid();
-    // appointment.date = date;
-    // appointment.provider_id = provider_id;
     Object.assign(appointment, { id: uuid(), date, user_id, provider_id })
 
     this.appointments.push(appointment)
