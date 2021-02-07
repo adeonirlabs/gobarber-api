@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe'
 
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository'
 
-interface IRequest {
+type IRequest = {
   provider_id: string
   day: number
   month: number
@@ -37,11 +37,11 @@ class ListProviderDayAvailabilityService {
       },
     )
 
-    const hourStar = 8
+    const hourStart = 8
 
     const eachHourArray = Array.from(
       { length: 10 },
-      (_, index) => index + hourStar,
+      (_, index) => index + hourStart,
     )
 
     const currentDate = new Date(Date.now())

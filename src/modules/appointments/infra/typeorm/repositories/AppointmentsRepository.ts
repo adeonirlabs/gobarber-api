@@ -6,7 +6,7 @@ import { getRepository, Raw, Repository } from 'typeorm'
 
 import Appointment from '../entities/Appointment'
 
-class AppointmentRepository implements IAppointmentsRepository {
+class AppointmentsRepository implements IAppointmentsRepository {
   private ormRepository: Repository<Appointment>
 
   constructor() {
@@ -50,6 +50,7 @@ class AppointmentRepository implements IAppointmentsRepository {
             `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
         ),
       },
+      relations: ['user'],
     })
 
     return appointments
@@ -83,4 +84,4 @@ class AppointmentRepository implements IAppointmentsRepository {
   }
 }
 
-export default AppointmentRepository
+export default AppointmentsRepository

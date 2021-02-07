@@ -16,9 +16,6 @@ services:
       - '27017:27017'
     volumes:
       - mongodb:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: docker
-      MONGO_INITDB_ROOT_PASSWORD: docker
 
   redis:
     image: redis:alpine

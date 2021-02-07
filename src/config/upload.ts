@@ -13,6 +13,7 @@ interface IUploadConfig {
   multer: {
     storage: StorageEngine
   }
+  // eslint-disable-next-line @typescript-eslint/ban-types
   config: { disk: {}; aws: { bucket: string } }
 }
 
